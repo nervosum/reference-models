@@ -1,12 +1,10 @@
 
-name: CI on push to main or issue-2 branch
+name: CI on push to main
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
-      - issue-2-Setup_CI/CD_for_reference-models
 
 jobs:
   build:
@@ -17,9 +15,7 @@ jobs:
       - uses: olafurpg/setup-scala@v10
 
       - name: Install clang and runtime dependencies
-        run: |
-          sudo apt install clang libunwind-dev
-          sudo apt install libgc-dev libre2-dev
+        run: sudo apt install clang libunwind-dev libgc-dev libre2-dev
 
       - name: Checkout cli repo
         uses: actions/checkout@v2
@@ -34,8 +30,3 @@ jobs:
 
       - name: Run CLI
         run: cli/cli/target/scala-2.11/cli-out build
-
-
-
-
-
