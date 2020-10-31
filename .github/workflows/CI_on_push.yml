@@ -1,0 +1,32 @@
+
+name: CI on push to main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: olafurpg/setup-scala@v10
+
+      - name: Install clang and runtime dependencies
+        run: sudo apt install clang libunwind-dev libgc-dev libre2-dev
+
+      - name: Checkout cli repo
+        uses: actions/checkout@v2
+        with:
+          repository: nervosum/nervosum
+          path: cli
+
+      - name: Build the CLI binary
+        run: |
+          cd cli
+          sbt cli/nativeLink
+
+      - name: Run CLI
+        run: cli/cli/target/scala-2.11/cli-out build
